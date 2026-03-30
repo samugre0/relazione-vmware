@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relazione VMware - Windows 2000</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tahoma&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Tahoma', 'MS Sans Serif', sans-serif;
+            font-size: 11px;
+            background: #008080;
+            overflow: hidden;
+            height: 100vh;
+            position: relative;
+        }
+        
+        .desktop {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 40px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+            align-content: flex-start;
+            gap: 30px;
+        }
+        
+        .desktop-icon {
+            width: 75px;
+            text-align: center;
+            color: white;
+            text-shadow: 1px 1px 2px black;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        
+        .desktop-icon:hover {
+            background: rgba(0,0,128,0.3);
+            border: 1px dotted white;
+        }
+        
+        .icon-img {
+            width: 32px;
+            height: 32px;
+            background: #c0c0c0;
+            border: 2px outset #fff;
+            margin: 0 auto 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        
+        .window {
+            position: absolute;
+            background: #c0c0c0;
+            border: 2px outset #fff;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+            min-width: 400px;
+            min-height: 300px;
+            display: none;
+        }
+        
+        .window.active {
+            display: block;
+            z-index: 1000;
+        }
+        
+        .title-bar {
+            background: linear-gradient(to right, #000080, #1084d0);
+            color: white;
+            padding: 3px 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            font-size: 11px;
+            cursor: move;
+        }
+        
+        .window-controls {
+            display: flex;
+            gap: 2px;
+        }
+        
+        .win-btn {
+            width: 16px;
+            height: 14px;
+            background: #c0c0c0;
+            border: 1px outset #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: bold;
+            color: black;
+            cursor: pointer;
+        }
+        
+        .win-btn:active {
+            border: 1px inset #fff;
+        }
+        
+        .menu-bar {
+            background: #c0c0c0;
+            border-bottom: 1px solid #808080;
+            padding: 2px 5px;
+            display: flex;
+            gap: 15px;
+        }
+        
+        .menu-item {
+            cursor: pointer;
+            padding: 2px 5px;
+        }
+        
+        .menu-item:hover {
+            background: #000080;
+            color: white;
+        }
+        
+        .window-content {
+            padding: 10px;
+            overflow: auto;
+            height: calc(100% - 50px);
+            background: white;
+            border: 2px inset #c0c0c0;
+            margin: 2px;
+        }
+        
+        .content-area {
+            font-family: 'Times New Roman', serif;
+            font-size: 14px;
+            line-height: 1.6;
+            color: black;
+            padding: 10px;
+        }
+        
+        h1 {
+            font-family: 'Arial', sans-serif;
+            font-size: 22px;
+            color: #000080;
+            border-bottom: 2px solid #000080;
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+        }
+        
+        h2 {
+            font-family: 'Arial', sans-serif;
+            font-size: 16px;
+            color: #800000;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        
+        h3 {
+            font-size: 14px;
+            color: #000080;
+            margin-top: 15px;
+            margin-bottom: 8px;
+        }
+        
+        p {
+            margin-bottom: 10px;
+            text-align: justify;
+        }
+        
+        .image-box {
+            border: 2px inset #c0c0c0;
+            background: #f0f0f0;
+            padding: 10px;
+            margin: 15px 0;
+            text-align: center;
+        }
+        
+        .image-box img {
+            max-width: 100%;
+            border: 1px solid #808080;
+        }
+        
+        .caption {
+            font-size: 11px;
+            color: #404040;
+            font-style: italic;
+            margin-top: 5px;
+            font-family: 'Tahoma', sans-serif;
+        }
+        
+        ul, ol {
+            margin-left: 30px;
+            margin-bottom: 15px;
+        }
+        
+        li {
+            margin-bottom: 5px;
+        }
+        
+        .highlight {
+            background: #ffffcc;
+            border: 1px solid #cccc66;
+            padding: 10px;
+            margin: 15px 0;
+        }
+        
+        .note-box {
+            background: #e6f3ff;
+            border: 1px solid #0066cc;
+            padding: 10px;
+            margin: 15px 0;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border: 1px solid #ff6b6b;
+            padding: 10px;
+            margin: 15px 0;
+        }
+        
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 15px 0;
+            border: 2px outset #fff;
+            font-size: 12px;
+        }
+        
+        th {
+            background: #000080;
+            color: white;
+            padding: 8px;
+            text-align: left;
+        }
+        
+        td {
+            border: 1px solid #c0c0c0;
+            padding: 6px;
+            background: white;
+        }
+        
+        tr:nth-child(even) td {
+            background: #f5f5f5;
+        }
+        
+        code {
+            background: #f0f0f0;
+            border: 1px solid #ccc;
+            padding: 2px 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+        }
+        
+        .tree-view {
+            font-family: 'Courier New', monospace;
+            background: white;
+            border: 2px inset #c0c0c0;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 12px;
+        }
+        
+        .step {
+            background: #f0f0f0;
+            border-left: 3px solid #000080;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        
+        .taskbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40px;
+            background: #c0c0c0;
+            border-top: 2px outset #fff;
+            display: flex;
+            align-items: center;
+            padding: 2px;
+            z-index: 9999;
+        }
+        
+        .start-btn {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: #c0c0c0;
+            border: 2px outset #fff;
+            padding: 4px 10px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        
+        .start-btn:active {
+            border: 2px inset #fff;
+        }
+        
+        .start-icon {
+            width: 20px;
+            height: 20px;
+            background: #008000;
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .taskbar-divider {
+            width: 2px;
+            height: 30px;
+            background: #808080;
+            border-right: 1px solid #fff;
+            margin: 0 5px;
+        }
+        
+        .task {
+            background: #c0c0c0;
+            border: 2px outset #fff;
+            padding: 4px 10px;
+            margin-right: 5px;
+            cursor: pointer;
+            max-width: 150px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+        
+        .task.active {
+            border: 2px inset #fff;
+            background: #d4d0c8;
+        }
+        
+        .clock {
+            margin-left: auto;
+            border: 2px inset #fff;
+            padding: 4px 10px;
+            background: #c0c0c0;
+        }
+        
+        .start-menu {
+            position: fixed;
+            bottom: 40px;
+            left: 0;
+            width: 200px;
+            background: #c0c0c0;
+            border: 2px outset #fff;
+            display: none;
+            z-index: 10000;
+        }
+        
+        .start-menu.show {
+            display: block;
+        }
+        
+        .start-header {
+            background: linear-gradient(to bottom, #000080, #1084d0);
+            color: white;
+            padding: 5px;
+            font-weight: bold;
+            font-size: 14px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            padding-left: 10px;
+        }
+        
+        .menu-list {
+            list-style: none;
+            padding: 5px 0;
+        }
+        
+        .menu-list li {
+            padding: 5px 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .menu-list li:hover {
+            background: #000080;
+            color: white;
+        }
+        
+        .separator {
+            height: 1px;
+            background: #808080;
+            border-bottom: 1px solid #fff;
+            margin: 5px 0;
+        }
+        
+        ::-webkit-scrollbar {
+            width: 16px;
+            background: #c0c0c0;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #c0c0c0;
+            border: 2px outset #fff;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="desktop">
+        <div class="desktop-icon" onclick="openWindow('vmware')">
+            <div class="icon-img">🖥️</div>
+            <div class="icon-text">Cos'è<br>VMware</div>
+        </div>
+        <div class="desktop-icon" onclick="openWindow('creazione')">
+            <div class="icon-img">💿</div>
+            <div class="icon-text">Creazione<br>VM</div>
+        </div>
+        <div class="desktop-icon" onclick="openWindow('licenze')">
+            <div class="icon-img">📜</div>
+            <div class="icon-text">Licenze<br>Server</div>
+        </div>
+        <div class="desktop-icon" onclick="openWindow('config')">
+            <div class="icon-img">⚙️</div>
+            <div class="icon-text">Config<br>Iniziale</div>
+        </div>
+        <div class="desktop-icon" onclick="openWindow('ad')">
+            <div class="icon-img">🏢</div>
+            <div class="icon-text">Active<br>Directory</div>
+        </div>
+        <div class="desktop-icon" onclick="openWindow('utenti')">
+            <div class="icon-img">👥</div>
+            <div class="icon-text">Utenti e<br>Gruppi</div>
+        </div>
+        <div class="desktop-icon" onclick="openWindow('dns')">
+            <div class="icon-img">🌐</div>
+            <div class="icon-text">Config<br>DNS</div>
+        </div>
+        <div class="desktop-icon" onclick="openWindow('client')">
+            <div class="icon-img">💻</div>
+            <div class="icon-text">Client nel<br>Dominio</div>
+        </div>
+        <div class="desktop-icon" onclick="openWindow('troubleshooting')">
+            <div class="icon-img">🔧</div>
+            <div class="icon-text">Trouble<br>shooting</div>
+        </div>
+    </div>
+
+    <!-- WINDOWS -->
+
+    <div class="window active" id="vmware" style="top: 50px; left: 100px; width: 700px; height: 500px;">
+        <div class="title-bar" onmousedown="startDrag(event, 'vmware')">
+            <div class="title-bar-text">📘 Cos'è_VMware.txt - Notepad</div>
+            <div class="window-controls">
+                <button class="win-btn" onclick="minimizeWindow('vmware')">_</button>
+                <button class="win-btn" onclick="maximizeWindow('vmware')">□</button>
+                <button class="win-btn" onclick="closeWindow('vmware')">×</button>
+            </div>
+        </div>
+        <div class="menu-bar">
+            <span class="menu-item">File</span>
+            <span class="menu-item">Edit</span>
+            <span class="menu-item">Search</span>
+            <span class="menu-item">Help</span>
+        </div>
+        <div class="window-content">
+            <div class="content-area">
+                <h1>Cos'è VMware: Architettura e Componenti</h1>
+                
+                <p>VMware rappresenta la soluzione di virtualizzazione enterprise più diffusa. Utilizzeremo <strong>VMware vSphere</strong>, una piattaforma di cloud computing che permette di consolidare l'infrastruttura fisica in una struttura virtuale flessibile.</p>
+                
+                <h2>Definizione di Hypervisor</h2>
+                <p>Un <strong>hypervisor</strong> (o Virtual Machine Monitor - VMM) è un software che crea ed esegue macchine virtuali. Esistono due tipologie:</p>
+                <ul>
+                    <li><strong>Type 1 (Bare-metal)</strong>: Installato direttamente sull'hardware fisico (es. VMware ESXi). Offre prestazioni superiori.</li>
+                    <li><strong>Type 2 (Hosted)</strong>: Installato sopra un sistema operativo convenzionale (es. VMware Workstation).</li>
+                </ul>
+                <p>VMware ESXi è un hypervisor di Tipo 1, che sostituisce completamente il sistema operativo tradizionale sul server fisico.</p>
+                
+                <h2>Componenti fondamentali</h2>
+                <div class="image-box">
+                    <img src="https://kimi-web-img.moonshot.cn/img/lh7-rt.googleusercontent.com/06840470008ccfb5fa945e168a393d9c826dfe5d.png" alt="vSphere Client">
+                    <div class="caption">Figura 1: Interfaccia VMware vSphere Client 7.0</div>
+                </div>
+                
+                <h3>1. Networking</h3>
+                <p>Gestione di Virtual Switches (vSwitch), Port Groups con policy comuni (VLAN, sicurezza), VMkernel NIC per traffico di gestione (vMotion, FT), e Uplink verso switch fisici.</p>
+                
+                <h3>2. Storage</h3>
+                <p>Datastores dove risiedono i file delle VM (formati VMFS, NFS), Virtual Disks (VMDK), e funzionalità come Storage vMotion per spostare VM senza downtime.</p>
+                
+                <h3>3. Virtual Machines</h3>
+                <p>Centro di controllo per monitorare stato acceso/spento, allocazione risorse (CPU, RAM), indirizzi IP, e strumenti di snapshot per backup.</p>
+                
+                <div class="note-box">
+                    <strong>Nota:</strong> VMware vCenter Server è il sistema di gestione centralizzata che permette di amministrare multipli host ESXi, con funzionalità avanzate come vMotion (migrazione live), DRS (bilanciamento carico) e HA (failover automatico).
+                </div>
+                
+                <h2>Vantaggi della virtualizzazione</h2>
+                <ul>
+                    <li><strong>Consolidamento server</strong>: Riduzione del numero di server fisici necessari</li>
+                    <li><strong>Isolamento</strong>: Ogni VM è indipendente, un crash non influenza le altre</li>
+                    <li><strong>Portabilità</strong>: Le VM sono file che possono essere spostati tra hardware diversi</li>
+                    <li><strong>Risparmio energetico</strong>: Minore consumo elettrico e raffreddamento</li>
+                    <li><strong>Rapidità deployment</strong>: Creazione di nuovi server in minuti anziché giorni</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="window" id="creazione" style="top: 70px; left: 120px; width: 750px; height: 550px;">
+        <div class="title-bar" onmousedown="startDrag(event, 'creazione')">
+            <div class="title-bar-text">💿 Creazione_VM.doc - WordPad</div>
+            <div class="window-controls">
+                <button class="win-btn" onclick="minimizeWindow('creazione')">_</button>
+                <button class="win-btn" onclick="maximizeWindow('creazione')">□</button>
+                <button class="win-btn" onclick="closeWindow('creazione')">×</button>
+            </div>
+        </div>
+        <div class="menu-bar">
+            <span class="menu-item">File</span>
+            <span class="menu-item">Edit</span>
+            <span class="menu-item">View</span>
+        </div>
+        <div class="window-content">
+            <div class="content-area">
+                <h1>Procedura Dettagliata: Creazione VM</h1>
+                
+                <h2>Fase 1: Configurazione Iniziale</h2>
+                <div class="step">
+                    <strong>Passo 1:</strong> Selezione compatibilità hypervisor (es. ESXi 7.0) per determinare funzionalità avanzate disponibili.<br>
+                    <strong>Passo 2:</strong> Selezione sistema operativo guest: "Microsoft Windows" → "Windows Server 2022".
+                </div>
+
+                <div class="image-box">
+                    <img src="https://kimi-web-img.moonshot.cn/img/www.groovypost.com/27c2273fc5f5e7fd7fd9b5a9f301ab5bb59b4f37.png" alt="VM Wizard">
+                    <div class="caption">Figura 2: New Virtual Machine Wizard - Scelta Typical vs Custom</div>
+                </div>
+
+                <h2>Fase 2: Allocazione Risorse Hardware</h2>
+                
+                <h3>CPU</h3>
+                <p>Per Windows Server 2022 in ambiente lab: 1-2 socket virtuali, 2-4 core per socket (totale 2-4 vCPU). Non superare il numero di core fisici disponibili.</p>
+                
+                <h3>RAM</h3>
+                <p>Windows Server 2022 Desktop Experience: <strong>minimo 4 GB, consigliati 6-8 GB</strong>. Versione Core: minimo 2 GB.</p>
+                
+                <h3>Storage</h3>
+                <p>Dimensione: 60-100 GB. Provisioning:
+                    <ul>
+                        <li>Thick Provision: Allocazione immediata (migliore performance)</li>
+                        <li>Thin Provision: Allocazione su richiesta (risparmio spazio)</li>
+                    </ul>
+                </p>
+
+                <h2>Fase 3: Scelta Edizione Windows Server</h2>
+                <div class="image-box">
+                    <img src="https://kimi-web-img.moonshot.cn/img/stuff.mit.edu/307bdb57255eeb72527b956e32649ba214e4ba8c.png" alt="VM Config">
+                    <div class="caption">Figura 3: Configurazione avanzata - Controller disco e compatibilità</div>
+                </div>
+
+                <h3>Core vs Desktop Experience</h3>
+                <table>
+                    <tr>
+                        <th>Caratteristica</th>
+                        <th>Core</th>
+                        <th>Desktop</th>
+                    </tr>
+                    <tr>
+                        <td>Interfaccia</td>
+                        <td>Solo PowerShell/CMD</td>
+                        <td>GUI completa</td>
+                    </tr>
+                    <tr>
+                        <td>Consumo RAM</td>
+                        <td>~2-3 GB</td>
+                        <td>~4-6 GB</td>
+                    </tr>
+                    <tr>
+                        <td>Uso consigliato</td>
+                        <td>Production, server dedicati</td>
+                        <td>Learning, lab, amministrazione interattiva</td>
+                    </tr>
+                </table>
+
+                <div class="highlight">
+                    Per questo progetto didattico è stata scelta la versione <strong>Desktop Experience</strong> perché facilita l'apprendimento delle procedure grafiche di Active Directory.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="window" id="licenze" style="top: 90px; left: 140px; width: 700px; height: 550px;">
+        <div class="title-bar" onmousedown="startDrag(event, 'licenze')">
+            <div class="title-bar-text">📜 Licenze_Server.doc - WordPad</div>
+            <div class="window-controls">
+                <button class="win-btn" onclick="minimizeWindow('licenze')">_</button>
+                <button class="win-btn" onclick="maximizeWindow('licenze')">□</button>
+                <button class="win-btn" onclick="closeWindow('licenze')">×</button>
+            </div>
+        </div>
+        <div class="menu-bar">
+            <span class="menu-item">File</span>
+            <span class="menu-item">Edit</span>
+        </div>
+        <div class="window-content">
+            <div class="content-area">
+                <h1>Licenziamento: Standard vs Datacenter</h1>
+                
+                <p>Microsoft licenzia Windows Server con un modello per processore fisico (o per core), includendo diritti di virtualizzazione che variano tra le edizioni.</p>
+                
+                <div class="image-box">
+                    <img src="https://kimi-web-img.moonshot.cn/img/www.nhr.com.sa/1ca2ad9a9a1155f2b029eb8ebae017266716bc0f.png" alt="Windows Server Licensing">
+                    <div class="caption">Figura 4: Schermata selezione edizione Windows Server durante installazione</div>
+                </div>
+                
+                <table>
+                    <tr>
+                        <th>Aspectto</th>
+                        <th>Standard</th>
+                        <th>Datacenter</th>
+                    </tr>
+                    <tr>
+                        <td>Diritti VM</td>
+                        <td>2 VM OSE + 1 host</td>
+                        <td>Illimitate</td>
+                    </tr>
+                    <tr>
+                        <td>Funzionalità</td>
+                        <td>Identiche</td>
+                        <td>Identiche</td>
+                    </tr>
+                    <tr>
+                        <td>Costo</td>
+                        <td>~€800-1000</td>
+                        <td>~€6000-8000</td>
+                    </tr>
+                    <tr>
+                        <td>Uso ideale</td>
+                        <td>Piccole imprese, filiali</td>
+                        <td>Cloud privati, data center</td>
+                    </tr>
+                </table>
+
+                <div class="image-box">
+                    <img src="https://kimi-web-img.moonshot.cn/img/www.sqlshack.com/e4a28cc8af5dc5feebfd7b09d956f86db407a79e.png" alt="Server Manager">
+                    <div class="caption">Figura 5: Server Manager - Sezione licensing e attivazione</div>
+                </div>
+
+                <div class="note-box">
+                    <strong>Decisione progettuale:</strong> Per il laboratorio scolastico (3-4 VM necessarie) è sufficiente la versione <strong>Standard</strong>. In alternativa, per uso didattico puro, Microsoft offre programmi come Azure Dev Tools for Teaching con licenze gratuite per studenti.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="window" id="config" style="top: 60px; left: 110px; width: 720px; height: 520px;">
+        <div class="title-bar" onmousedown="startDrag(event, 'config')">
+            <div class="title-bar-text">⚙️ Config_Iniziale.doc - WordPad</div>
+            <div class="window-controls">
+                <button class="win-btn" onclick="minimizeWindow('config')">_</button>
+                <button class="win-btn" onclick="maximizeWindow('config')">□</button>
+                <button class="win-btn" onclick="closeWindow('config')">×</button>
+            </div>
+        </div>
+        <div class="menu-bar">
+            <span class="menu-item">File</span>
+            <span class="menu-item">Edit</span>
+        </div>
+        <div class="window-content">
+            <div class="content-area">
+                <h1>Configurazione Iniziale del Server</h1>
+                
+                <h2>Primo Avvio</h2>
+                <p>Al termine dell'installazione, impostare password complessa per Administrator (minimo 12 caratteri, maiuscole, minuscole, numeri, simboli).</p>
+                
+                <div class="image-box">
+                    <img src="https://kimi-web-img.moonshot.cn/img/www.nhr.com.sa/1ca2ad9a9a1155f2b029eb8ebae017266716bc0f.png" alt="Windows Setup">
+                    <div class="caption">Figura 6: Setup Windows Server 2022 - Selezione lingua</div>
+                </div>
+
+                <h2>Configurazione Rete</h2>
+                <div class="step">
+                    <strong>IP Statico richiesto:</strong><br>
+                    IP: 172.17.0.88/24<br>
+                    Gateway: 172.17.0.1<br>
+                    DNS Primario: 127.0.0.1 (fondamentale per AD!)
+                </div>
+                
+                <div class="warning-box">
+                    <strong>Critico:</strong> Non installare mai Active Directory con DHCP dinamico. Il DC deve avere IP statico.
+                </div>
+
+                <h2>Installazione VMware Tools</h2>
+                <p>Suite di utility che ottimizza la VM:</p>
+                <ul>
+                    <li>SVGA Driver (risoluzione alta)</li>
+                    <li>VMXNET3 (adattatore rete paravirtualizzato)</li>
+                    <li>Sincronizzazione orologio</li>
+                    <li>Copia/incolla bidirezionale</li>
+                </ul>
+
+                <div class="image-box">
+                    <img src="https://kimi-web-img.moonshot.cn/img/www.dtonias.com/dad4929b6bcb9d8507b40443a05e6811fae67eed.webp" alt="VMware Tools">
+                    <div class="caption">Figura 7: Menu VM > Install VMware Tools</div>
+                </div>
+
+                <h2>Desktop Remoto</h2>
+                <p>Abilitare da Server Manager → Local Server → Remote Desktop → Enable. Permette gestione comoda via RDP all'indirizzo 172.17.0.88.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="window" id="ad" style="top: 80px; left: 130px; width: 750px; height: 580px;">
+        <div class="title-bar" onmousedown="startDrag(event, 'ad')">
+            <div class="title-bar-text">🏢 Active_Directory.doc - WordPad</div>
+            <div class="window-controls">
+                <button class="win-btn" onclick="minimizeWindow('ad')">_</button>
+                <button class="win-btn" onclick="maximizeWindow('ad')">□</button>
+                <button class="win-btn" onclick="closeWindow('ad')">×</button>
+            </div>
+        </div>
+        <div class="menu-bar">
+            <span class="menu-item">File</span>
+            <span class="menu-item">Action</span>
+            <span class="menu-item">View</span>
+        </div>
+        <div class="window-content">
+            <div class="content-area">
+                <h1>Implementazione Active Directory</h1>
+                
+                <h2>Teoria: Domain Controller</h2>
+                <p>Un <strong>Domain Controller (DC)</strong> ospita il database Active Directory (NTDS.DIT) e fornisce servizi di autenticazione Kerberos/LDAP. Funzioni:</p>
+                <ul>
+                    <li>Autentica accessi utente (logon)</li>
+                    <li>Gestisce politiche di sicurezza (Group Policy)</li>
+                    <li>Mantiene catalogo globale (Global Catalog)</li>
+                    <li>Gestisce risoluzione nomi tramite DNS integrato</li>
+                </ul>
+
+                <h2>Fase 1: Installazione Ruolo</h2>
+                <p>Server Manager → Manage → Add Roles and Features:</p>
+                <ol>
+                    <li>Server Selection: selezionare server locale</li>
+                    <li>Server Roles: spuntare <strong>Active Directory Domain Services</strong></li>
+                    <li>Aggiungere features richieste (Group Policy Management)</li>
+                    <li>Completare wizard e attendere installazione</li>
+                </ol>
+
+                <div class="image-box">
+                    <img src="https://kimi-web-img.moonshot.cn/img/www.sqlshack.com/e4a28cc8af5dc5feebfd7b09d956f86db407a79e.png" alt="Server Manager">
+                    <div class="caption">Figura 8: Server Manager Dashboard</div>
+                </div>
+
+                <div class="image-box">
+                    <img src="https://kimi-web-img.moonshot.cn/img/petri.com/bf79945d6dbc6221c74f1f2ed5bf8c6d31f28945.jpg" alt="Add Roles">
+                    <div class="caption">Figura 9: Wizard - Selezione AD DS</div>
+                </div>
+
+                <div class="warning-box">
+                    A installazione completata, <strong>NON RIAVVIARE</strong>. Completare prima la promozione a DC.
+                </div>
+
+                <h2>Fase 2: Promozione a DC</h2>
+                <p>Flag giallo in Server Manager → "Promote this server to a domain controller":</p>
+                <ul>
+                    <li>Deployment Configuration: <strong>Add a new forest</strong></li>
+                    <li>Root domain name: <code>dc-4l</code></li>
+                    <li>Forest functional level: Windows Server 2016</li>
+                    <li>Password DSRM: [impostare password complessa]</li>
+                    <li>DNS Options: Create DNS delegation (se richiesto)</li>
+                    <li>Paths: default (C:\Windows\NTDS, C:\Windows\SYSVOL)</li>
+                </ul>
+
+                <div class="image-box">
+                    <img src="https://kimi-web-img.moonshot.cn/img/www.lepide.com/36c6db569325d121991a40cdf1fea23e703b5212.jpg" alt="Promote DC">
+                    <div class="caption">Figura 10: Promozione a Domain Controller</div>
+                </div>
+
+                <p>Cliccare Install. Il server si riavvierà automaticamente.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="window" id="utenti" style="top: 100px; left: 150px; width: 720px; height: 560px;">
+        <div class="title-bar" onmousedown="startDrag(event, 'utenti')">
+            <div class="title-bar-text">👥 Utenti_e_Gruppi.doc - WordPad</div>
+            <div class="window-controls">
+                <button class="win-btn" onclick="minimizeWindow('utenti')">_</button>
+                <button class="win-btn" onclick="maximizeWindow('utenti')">□</button>
+                <button class="win-btn" onclick="closeWindow('utenti')">×</button>
+            </div>
+        </div>
+        <div class="menu-bar">
+            <span class="menu-item">File</span>
+            <span class="menu-item">Action</span>
+        </div>
+        <div class="window-content">
+            <div class="content-area">
+                <h1>Gestione Utenti e Gruppi</h1>
+                
+                <h2>Struttura Logica AD</h2>
+                <div class="tree-view">
+                    Forest: dc-4l<br>
+                    └── Domain: dc-4l<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;├── Builtin<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;├── Computers<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;└── <strong>OU personalizzate</strong><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── Users Helpdesk<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── mario.rossi<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── Tecnici (Sub-OU)<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── GR_Tecnici (Group)<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── tecnico1
+                </div>
+
+                <div class="image-box">
+                    <img src="https://kimi-web-img.moonshot.cn/img/www.windows-active-directory.com/91128b2f6cded8f8b6a23c71174c05be04ca711b.png" alt="ADUC">
+                    <div class="caption">Figura 11: Active Directory Users and Computers</div>
+                </div>
+
+                <h2>Procedura Creazione</h2>
+                
+                <h3>1. Creazione OU</h3>
+                <p>Tasto destro su dominio → New → Organizational Unit → "Users Helpdesk". Spuntare "Protect from accidental deletion".</p>
+                
+                <h3>2. Creazione Utente</h3>
+                <p>Dentro OU: New → User</p>
+                <ul>
+                    <li>Name: Mario Rossi</li>
+                    <li>Logon: mario.rossi</li>
+                    <li>Password: non scadente (per lab)</li>
+                </ul>
+
+                <h3>3. Creazione Gruppo</h3>
+                <p>Sub-OU "Tecnici" → New → Group:</p>
+                <ul>
+                    <li>Name: GR_Tecnici</li>
+                    <li>Scope: Global (visibile in tutto il dominio)</li>
+                    <li>Type: Security (per permessi risorse)</li>
+                </ul>
+
+                <h3>4. Membership</h3>
+                <p>Aggiungere tecnico1 a GR_Tecnici tramite Properties → Member Of → Add.</p>
+
+                <div class="highlight">
+                    <strong>Best Practice AGDLP:</strong> Assegnare permessi ai Gruppi, non ai singoli utenti. Facilita la gestione quando il personale cambia.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="window" id="dns" style="top: 110px; left: 160px; width: 680px; height: 500px;">
+        <div class="title-bar" onmousedown="startDrag(event, 'dns')">
+            <div class="title-bar-text">🌐 Config_DNS.doc - WordPad</div>
+            <div class="window-controls">
+                <button class="win-btn" onclick="minimizeWindow('dns')">_</button>
+                <button class="win-btn" onclick="maximizeWindow('dns')">□</button>
+                <button class="win-btn" onclick="closeWindow('dns')">×</button>
+            </div>
+        </div>
+        <div class="menu-bar">
+            <span class="menu-item">File</span>
+            <span class="menu-item">Action</span>
+        </div>
+        <div class="window-content">
+            <div class="content-area">
+                <h1>Configurazione DNS</h1>
+                
+                <p>Active Directory è strettamente integrato con DNS. I client usano DNS per trovare i Domain Controller (record SRV) e risolvere nomi host.</p>
+                
+                <div class="warning-box">
+                    <strong>Regola d'oro:</strong> Il DC deve puntare a sé stesso (127.0.0.1) come DNS primario. Mai usare DNS esterni come primario su un DC!
+                </div>
+
+                <h2>Configurazione Forwarders</h2>
+                <p>I forwarders permettono al DNS interno di risolvere nomi Internet interrogando server esterni:</p>
+                
+                <div class="step">
+                    1. DNS Manager → Tasto destro server → Properties<br>
+                    2. Tab Forwarders → Edit<br>
+                    3. Add: 8.8.8.8 (Google) e/o 1.1.1.1 (Cloudflare)<br>
+                    4. OK per applicare
+                </div>
+
+                <div class="image-box">
+                    <img src="https://kimi-web-img.moonshot.cn/img/desk.zoho.com/2eb593c8bfcabdf34047833bfbee7d8e673b48da.png" alt="DNS Manager">
+                    <div class="caption">Figura 12: DNS Manager - Configurazione Forwarders</div>
+                </div>
+
+                <h2>Zone Create Automaticamente</h2>
+                <ul>
+                    <li><strong>Forward Lookup Zone:</strong> dc-4l (record A, NS, SOA, SRV)</li>
+                    <li><strong>Reverse Lookup Zone:</strong> 0.17.172.in-addr.arpa (risoluzione IP→nome)</li>
+                    <li><strong>_msdcs.dc-4l:</strong> Localizzazione servizi AD</li>
+                </ul>
+
+                <div class="note-box">
+                    <strong>Verifica:</strong> Eseguire <code>nslookup dc-4l</code> e <code>nslookup -type=SRV _ldap._tcp.dc._msdcs.dc-4l</code> per confermare che il DC sia raggiungibile.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="window" id="client" style="top: 70px; left: 120px; width: 760px; height: 600px;">
+        <div class="title-bar" onmousedown="startDrag(event, 'client')">
+            <div class="title-bar-text">💻 Client_nel_Dominio.doc - WordPad</div>
+            <div class="window-controls">
+                <button class="win-btn" onclick="minimizeWindow('client')">_</button>
+                <button class="win-btn" onclick="maximizeWindow('client')">□</button>
+                <button class="win-btn" onclick="closeWindow('client')">×</button>
+            </div>
+        </div>
+        <div class="menu-bar">
+            <span class="menu-item">File</span>
+            <span class="menu-item">Edit</span>
+        </div>
+        <div class="window-content">
+            <div class="content-area">
+                <h1>Join dei Client al Dominio</h1>
+                
+                <h2>Prerequisiti Client</h2>
+                <ul>
+                    <li>Windows 10 Pro (la Home non supporta join a dominio)</li>
+                    <li>Connettività di rete con DC (ping 172.17.0.88)</li>
+                    <li>DNS configurato: primario 172.17.0.88</li>
+                </ul>
+
+                <div class="image-box">
+                    <img src="https://kimi-web-img.moonshot.cn/img/www.windows-active-directory.com/91128b2f6cded8f8b6a23c71174c05be04ca711b.png" alt="System Properties">
+                    <div class="caption">Figura 13: System Properties - Unione al dominio</div>
+                </div>
+
+                <div class="warning-box">
+                    Se il client usa DNS esterno (8.8.8.8), darà errore "DNS name does not exist" durante il join.
+                </div>
+
+                <h2>Procedura Join</h2>
+                <ol>
+                    <li>Settings → System → About → Advanced system settings</li>
+                    <li>Tab Computer Name → Change</li>
+                    <li>Selezionare Domain e inserire: <code>dc-4l</code></li>
+                    <li>Autenticare con credenziali amministratore dominio</li>
+                    <li>Riavviare</li>
+                </ol>
+
+                <div class="image-box">
+                    <img src="https://kimi-web-img.moonshot.cn/img/www.dtonias.com/1a98d5738c7898d7a99f3a79c57d328687779f24.png" alt="Domain Join">
+                    <div class="caption">Figura 14: Domain Join - Inserimento credenziali amministratore</div>
+                </div>
+
+                <h2>Configurazione Condivisione "Area Tecnici"</h2>
+                <p>Sul server:</p>
+                <ol>
+                    <li>Creare cartella C:\Condivisioni\AreaTecnici</li>
+                    <li>Properties → Sharing → Advanced Sharing</li>
+                    <li>Permissions: rimuovere Everyone, aggiungere GR_Tecnici (Full Control)</li>
+                    <li>Security (NTFS): Disable inheritance → Convert → Aggiungere GR_Tecnici</li>
+                </ol>
+
+                <h2>Test Scenari</h2>
+                
+                <table>
+                    <tr style="background: #ffcccc;">
+                        <td><strong>❌ Utente Standard (Mario Rossi)</strong></td>
+                        <td>
+                            Accesso a \\dc-4l\AreaTecnici<br>
+                            <strong>Risultato:</strong> Accesso negato<br>
+                            <em>Non membro di GR_Tecnici</em>
+                        </td>
+                    </tr>
+                    <tr style="background: #ccffcc;">
+                        <td><strong>✅ Utente Tecnico</strong></td>
+                        <td>
+                            Accesso a \\dc-4l\AreaTecnici<br>
+                            <strong>Risultato:</strong> Accesso consentito<br>
+                            <em>Membro di GR_Tecnici con permessi Full Control</em>
+                        </td>
+                    </tr>
+                </table>
+
+                <h3>Test UAC (User Account Control)</h3>
+                <p>Tentare installazione software con utente tecnico: appare prompt UAC che richiede credenziali amministratore, confermando che i diritti di dominio non equivalgono a diritti amministrativi locali.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="window" id="troubleshooting" style="top: 90px; left: 140px; width: 720px; height: 580px;">
+        <div class="title-bar" onmousedown="startDrag(event, 'troubleshooting')">
+            <div class="title-bar-text">🔧 Troubleshooting.txt - Notepad</div>
+            <div class="window-controls">
+                <button class="win-btn" onclick="minimizeWindow('troubleshooting')">_</button>
+                <button class="win-btn" onclick="maximizeWindow('troubleshooting')">□</button>
+                <button class="win-btn" onclick="closeWindow('troubleshooting')">×</button>
+            </div>
+        </div>
+        <div class="menu-bar">
+            <span class="menu-item">File</span>
+            <span class="menu-item">Edit</span>
+        </div>
+        <div class="window-content">
+            <div class="content-area">
+                <h1>Note Tecniche e Troubleshooting</h1>
+                
+                <h2>Errori Comuni e Soluzioni</h2>
+                
+                <div class="image-box">
+                    <img src="https://kimi-web-img.moonshot.cn/img/www.lepide.com/36c6db569325d121991a40cdf1fea23e703b5212.jpg" alt="Event Viewer">
+                    <div class="caption">Figura 15: Event Viewer - Visualizzazione errori AD e DNS</div>
+                </div>
+
+                <table>
+                    <tr>
+                        <th>Problema</th>
+                        <th>Causa</th>
+                        <th>Soluzione</th>
+                    </tr>
+                    <tr>
+                        <td>"Domain doesn't exist"</td>
+                        <td>DNS errato</td>
+                        <td>Impostare DNS 172.17.0.88</td>
+                    </tr>
+                    <tr>
+                        <td>"Access denied" su share</td>
+                        <td>Permessi insufficienti</td>
+                        <td>Verificare membership gruppo</td>
+                    </tr>
+                    <tr>
+                        <td>VM lenta</td>
+                        <td>RAM insufficiente</td>
+                        <td>Aumentare a 4GB minimo</td>
+                    </tr>
+                </table>
+
+                <div class="image-box">
+                    <img src="https://kimi-web-img.moonshot.cn/img/desk.zoho.com/2eb593c8bfcabdf34047833bfbee7d8e673b48da.png" alt="Command Prompt">
+                    <div class="caption">Figura 16: Command Prompt - Verifica connettività e risoluzione nomi</div>
+                </div>
+
+                <h2>Termini usati nel lab</h2>
+                <ul>
+                    <li><strong>OU (Unità Organizzativa):</strong> Le "cartelle" in AD dove mettiamo utenti e gruppi per organizzarli meglio</li>
+                    <li><strong>Gruppo di Sicurezza:</strong> Un contenitore di utenti a cui assegniamo gli stessi permessi (tipo GR_Tecnici)</li>
+                    <li><strong>DNS:</strong> Il sistema che traduce i nomi (come dc-4l) in indirizzi IP</li>
+                    <li><strong>Share/Condivisione:</strong> Cartella di rete accessibile da altri PC (come Area Tecnici)</li>
+                    <li><strong>Join al dominio:</strong> L'operazione che fa entrare un PC Windows nel dominio dc-4l</li>
+                </ul>
+
+                <div class="highlight">
+                    Relazione realizzata da Samuele Greci - Classe 4L<br>
+                    ISIS Zanardelli - A.S. 2025/2026
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="taskbar">
+        <button class="start-btn" onclick="toggleStartMenu()">
+            <div class="start-icon">🪟</div>
+            <span>Start</span>
+        </button>
+        <div class="taskbar-divider"></div>
+        <div class="task active" id="task-vmware" onclick="focusWindow('vmware')">Cos'è VMware</div>
+        <div class="task" id="task-creazione" onclick="focusWindow('creazione')">Creazione VM</div>
+        <div class="task" id="task-licenze" onclick="focusWindow('licenze')">Licenze</div>
+        <div class="task" id="task-config" onclick="focusWindow('config')">Config</div>
+        <div class="task" id="task-ad" onclick="focusWindow('ad')">AD</div>
+        <div class="task" id="task-utenti" onclick="focusWindow('utenti')">Utenti</div>
+        <div class="task" id="task-dns" onclick="focusWindow('dns')">DNS</div>
+        <div class="task" id="task-client" onclick="focusWindow('client')">Client</div>
+        <div class="task" id="task-troubleshooting" onclick="focusWindow('troubleshooting')">Troubleshooting</div>
+        <div class="clock" id="clock">21:42</div>
+    </div>
+
+    <div class="start-menu" id="startMenu">
+        <div class="start-header">Samuele Greci — 4L</div>
+        <ul class="menu-list">
+            <li onclick="openWindow('vmware'); toggleStartMenu()">📘 Cos'è VMware</li>
+            <li onclick="openWindow('creazione'); toggleStartMenu()">💿 Creazione VM</li>
+            <li onclick="openWindow('licenze'); toggleStartMenu()">📜 Licenze</li>
+            <li onclick="openWindow('config'); toggleStartMenu()">⚙️ Config Iniziale</li>
+            <li onclick="openWindow('ad'); toggleStartMenu()">🏢 Active Directory</li>
+            <li onclick="openWindow('utenti'); toggleStartMenu()">👥 Utenti e Gruppi</li>
+            <li onclick="openWindow('dns'); toggleStartMenu()">🌐 DNS</li>
+            <li onclick="openWindow('client'); toggleStartMenu()">💻 Client</li>
+            <li onclick="openWindow('troubleshooting'); toggleStartMenu()">🔧 Troubleshooting</li>
+            <div class="separator"></div>
+            <li onclick="alert('Shutting down...'); location.reload()">🚪 Shut Down</li>
+        </ul>
+    </div>
+
+    <script>
+        let zIndex = 1000;
+        let activeWindow = 'vmware';
+        
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clock').textContent = 
+                String(now.getHours()).padStart(2,'0') + ':' + 
+                String(now.getMinutes()).padStart(2,'0');
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+        
+        function openWindow(id) {
+            const win = document.getElementById(id);
+            win.style.display = 'block';
+            win.style.zIndex = ++zIndex;
+            activeWindow = id;
+            updateTaskbar();
+        }
+        
+        function closeWindow(id) {
+            document.getElementById(id).style.display = 'none';
+            if (activeWindow === id) activeWindow = null;
+            updateTaskbar();
+        }
+        
+        function minimizeWindow(id) {
+            document.getElementById(id).style.display = 'none';
+            if (activeWindow === id) activeWindow = null;
+            updateTaskbar();
+        }
+        
+        function maximizeWindow(id) {
+            const win = document.getElementById(id);
+            if (win.style.width === '100%') {
+                win.style.width = '700px';
+                win.style.height = '500px';
+                win.style.top = '50px';
+                win.style.left = '100px';
+            } else {
+                win.style.width = '100%';
+                win.style.height = 'calc(100% - 40px)';
+                win.style.top = '0';
+                win.style.left = '0';
+            }
+        }
+        
+        function focusWindow(id) {
+            const win = document.getElementById(id);
+            win.style.display = 'block';
+            win.style.zIndex = ++zIndex;
+            activeWindow = id;
+            updateTaskbar();
+        }
+        
+        function updateTaskbar() {
+            document.querySelectorAll('.task').forEach(t => t.classList.remove('active'));
+            if (activeWindow) {
+                const task = document.getElementById('task-' + activeWindow);
+                if (task) task.classList.add('active');
+            }
+        }
+        
+        function toggleStartMenu() {
+            document.getElementById('startMenu').classList.toggle('show');
+        }
+        
+        let draggedWindow = null;
+        let dragOffsetX = 0;
+        let dragOffsetY = 0;
+        
+        function startDrag(e, id) {
+            draggedWindow = document.getElementById(id);
+            dragOffsetX = e.clientX - draggedWindow.offsetLeft;
+            dragOffsetY = e.clientY - draggedWindow.offsetTop;
+            draggedWindow.style.zIndex = ++zIndex;
+            activeWindow = id;
+            updateTaskbar();
+        }
+        
+        document.addEventListener('mousemove', (e) => {
+            if (draggedWindow) {
+                draggedWindow.style.left = (e.clientX - dragOffsetX) + 'px';
+                draggedWindow.style.top = (e.clientY - dragOffsetY) + 'px';
+            }
+        });
+        
+        document.addEventListener('mouseup', () => draggedWindow = null);
+        
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.start-menu') && !e.target.closest('.start-btn')) {
+                document.getElementById('startMenu').classList.remove('show');
+            }
+        });
+        
+        updateTaskbar();
+    </script>
+</body>
+</html>
